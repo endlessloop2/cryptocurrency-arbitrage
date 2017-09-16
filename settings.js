@@ -115,6 +115,34 @@ let markets = [
             })
         }
     },
+	    {
+		    //FUCK JAVASCRIPT
+        marketName: 'surbtc',
+        URL: 'https://www.surbtc.com/api/v2/markets/eth-btc/ticker.json',
+        toBTCURL: 'https://www.surbtc.com/api/v2/markets/btc-clp/ticker.json', //FALSE
+        pairURL : '',
+        last: function (data, coin_prices, toBTCURL) { //Where to find the last price of coin in JSON data
+            return new Promise(function (res, rej) {
+		    
+                let priceOfBTC = data.btc.ticker.last;
+                try {
+                    for (let key in data) {
+                        let coinName = key.toUpperCase();
+                        let price = data[key]['ticker'].last;
+                        if (!coin_prices[coinName]) coin_prices[coinName] = {};
+
+                        coin_prices[coinName]["btc38"] = data[key]['ticker'].last / priceOfBTC;
+                    }
+                    res(coin_prices);
+                }
+
+                catch (err) {
+                    console.log(err);
+                    rej(err)
+                }
+            })
+        }
+    },
 
     {
         marketName: 'jubi',
